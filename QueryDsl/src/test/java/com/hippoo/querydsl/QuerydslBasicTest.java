@@ -230,4 +230,42 @@ public class QuerydslBasicTest {
         assertThat(teamB.get(team.name)).isEqualTo("teamB");
         assertThat(teamB.get(member.age.avg())).isEqualTo(35);
     }
+
+    @Test
+    @DisplayName("Querydsl join")
+    void join() {
+        // When
+        List<Member> result = queryFactory
+                .selectFrom(member)
+                .join(member.team, team)
+//                .leftJoin(member.team, team)
+                .where(team.name.eq("teamA"))
+                .fetch();
+
+        // Then
+        assertThat(result)
+                .extracting("username")
+                .containsExactly("member1", "member2");
+
+    }
+    
+    @Test
+    @DisplayName("Querydsl theta join")
+    void theta_join() {
+        // Given
+        em.persist(new Member("teamA"));
+        em.persist(new Member("teamB"));
+        
+        // When
+        List<Member> result = queryFactory
+                .select(member)
+                .from(member, team)
+                .where(member.username.eq(team.name))
+                .fetch();
+
+        // Then
+        assertThat(result)
+                .extracting("username")
+                .containsExactly("teamA", "teamB");
+    }
 }
