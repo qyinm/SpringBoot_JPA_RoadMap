@@ -6,8 +6,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 import com.hippoo.querydsl.entity.Member;
 import com.hippoo.querydsl.entity.QMember;
 import com.hippoo.querydsl.entity.Team;
+import com.querydsl.core.QueryResults;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -80,5 +82,27 @@ public class QuerydslBasicTest {
 
         assertThat(findMember.getUsername()).isEqualTo("member1");
 
+    }
+
+    @Test
+    public void resultFetch() {
+        // when
+        // List<Member> fetch = queryFactory
+        //         .selectFrom(member)
+        //         .fetch();
+
+        // Member fetchOne = queryFactory.selectFrom(member).fetchOne();
+
+        // Member fetchFirst = queryFactory.selectFrom(member)
+        //         .fetchFirst();
+
+//        QueryResults<Member> results = queryFactory.selectFrom(member).fetchResults();
+//        results.getTotal();
+//        List<Member> content = results.getResults();
+
+        long total = queryFactory
+                .selectFrom(member)
+                .fetchCount();
+        
     }
 }
